@@ -18,8 +18,9 @@ function createDogListItem(dog){
     //from the dogContainer
    
     li.addEventListener('click', function () {
-        // dogContainer.parentNode.removeChild(dogContainer.inn);
-        createDogCard(dog)
+        dogContainer.innerHTML =""
+        let dogCard = createDogCard(dog)
+        // dogContainer.append(dogCard)
         
         
         
