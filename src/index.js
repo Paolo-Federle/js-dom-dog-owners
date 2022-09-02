@@ -2,177 +2,122 @@ console.log(data);
 
 // WRITE YOUR CODE BELOW!
 
-function createDogListItem(dog){
-    const li = document.createElement("li");
-    const dogContainer = document.querySelector(".main");
-  
-    li.className = "dogs-list__button";
-    li.innerText = dog.name;
-  
-    // (1)
-    //TODO: Here, add a click event listener
-    //on to the li element. Inside that listener,
-    //call the createDogCard method and pass
-    //the dog variable as a parameter. You will
-    //also need to remove any existing dog card
-    //from the dogContainer
-   
-    li.addEventListener('click', function () {
-        dogContainer.innerHTML =""
-        let dogCard = createDogCard(dog)
-        // dogContainer.append(dogCard)
-        
-        
-        
-})
+const headerDogList = document.querySelector('.dogs-list')
+const mainSection = document.querySelector('.main')
+
+function createDogHeaderItem(dog) {
+  // dogItem lista nomi alta dei cani
+  const dogItem = document.createElement('li')
+
+  // aggiunta classe alla lista nomi in alto
+  dogItem.className = "dogs-list__button";
+
+  // nomi alla lista cani in alto
+  dogItem.innerText = dog.name
+
+  return dogItem
+}
 
 
-    return li;
-  };
-  
-  function createSection() {
-    const section = document.createElement("section");
-    section.className = "main__dog-section";
-    return section;
-  };
-  
-  const createDogCardDesc = (bio) => {
-    const div = document.createElement("div");
-    div.className = "main__dog-section__desc";
-  
-    //(2)
-    //TODO: Update this section to create new elements
-    //for the bio header and the bio text. Add those
-    //elements to the div.
+for (const thisDog of data) {
+  const myDogItem = document.createElement('li')
+  myDogItem.innerHTML = thisDog.name
+  myDogItem.setAttribute('class', 'dogs-list__button')
+  myDogItem.addEventListener('click', () => {
+    createDogCard(thisDog)
+ })
+  headerDogList.append(myDogItem)
+}
+
+// data.forEach(thisDog => {
+//       const myDogItem = createDogHeaderItem(thisDog)
+//       headerDogList.append(myDogItem)
+// })
+
+
+const createDogCard = (thisDog) => {
+  mainSection.innerHTML = ""
+  const section = createSection()
+  const header = createSectionHeader(thisDog)
+  const image = createSectionImage(thisDog)
+  const desc = createDogCardDesc(thisDog)
     
-    div.append(header, text);
-  
-    return div;
-  };
-  
-  function createDogCardBottomSection(dog) {
-    const button = document.createElement("button");
-    const text = document.createElement("p");
-    const div = document.createElement("div");
-  
-    div.className = "main__dog-section__btn";
-  
-    // (6)
-    //TODO: If the isGoodDog flag is true, set
-    //the button text to "Bad Dog". If false,
-    //set it to "Good Dog"
-  
-    div.append(text, button);
-    return div;
-  };
-  
-  const createDogCard = (dog) => {
-    const section = createSection();
-    const header = document.createElement("h2");
-    header.innerText = dog.name;
-  
-    // (3)
-    //TODO: Update this section to create a new image
-    //element and add it to the dog card. Set the source of 
-    //the image to the image path on the dog object
-    
-    const desc = createDogCardDesc(dog.bio);
-    const bottomSection = createDogCardBottomSection(dog);
-  
-    section.append(header, desc, bottomSection);
-  
-    return section;
-  };
-  
-  function createForm() {
-    const form = document.createElement("form");
-  
-    const nameInput = createInput("name");
-    const imgInput = createInput("image", "url");
-    const bioInput = createInput("bio", "textarea");
-    const submitInput = createInput("submit", "submit", "Let's add a dog!");
-  
-    const nameLabel = createLabel("name", "Dog's name");
-    const imgLabel = createLabel("image", "Dog's picture");
-    const bioLabel = createLabel("bio", "Dog's bio");
-  
-    form.className = "form";
-    submitInput.className = "form__button";
-  
-    //(5)
-    //TODO: Add an event listener on to the form to capture the
-    //submit event. In the submit event, add a item  to the
-    //list of dogs at the top of the page, and add a new object
-    //in to the dogs array with the data captured from the form.
-  
-    form.append(
-      nameLabel,
-      nameInput,
-      imgLabel,
-      imgInput,
-      bioLabel,
-      bioInput,
-      submitInput
-    );
-    return form;
-  };
-  
-  function createInput(idName, type = "text", value) {
-    let input = null;
-  
-    if (type === "textarea") {
-      input = document.createElement("textarea");
-      input.setAttribute("rows", "5");
-    } else {
-      input = document.createElement("input");
-      input.setAttribute("type", type);
-    }
-  
-    input.setAttribute("id", idName);
-    input.setAttribute("name", idName);
-  
-    if (value) input.setAttribute("value", value);
-  
-    return input;
+  section.append(header, image, desc)
+  return section
+}
+
+function createSection() {
+  const dogSection = document.createElement("section")
+  dogSection.setAttribute("class", "main__dog-section")
+  mainSection.append(dogSection)
+  return dogSection
+}
+
+function createSectionHeader(chosenDog) {
+  const sectionHeader = document.createElement("h2")
+  sectionHeader.innerText = chosenDog.name
+  return sectionHeader
+}
+
+function createSectionImage(chosenDog) {
+  const dogImg = document.createElement("img")
+  dogImg.setAttribute("src", chosenDog.image)
+  return dogImg
+}
+
+function createDogCardDesc(thisDog) {
+  const dogDescriptionCard = document.createElement("div")
+  dogDescriptionCard.setAttribute("class", "main__dog-section__desc")
+  createBioInDesc(dogDescriptionCard)
+  createTextDesc(dogDescriptionCard, thisDog)
+  dogIsNaughty(dogDescriptionCard, thisDog)
+  return dogDescriptionCard
+}
+
+function createBioInDesc(dogDescriptionCard) {
+  const bio = document.createElement("h3")
+  bio.innerText = "Bio"
+  dogDescriptionCard.append(bio)
+  return bio
+}
+
+function createTextDesc(dogDescriptionCard, thisDog){
+  const dogDescriptionText = document.createElement("p")
+  dogDescriptionText.innerText = thisDog.bio
+  dogDescriptionCard.append(dogDescriptionText)
+  return dogDescriptionText
+}
+
+function dogIsNaughty(dogDescriptionCard, thisDog) {
+  const dogIsNaughtyDiv = document.createElement("div")
+  dogIsNaughtyDiv.setAttribute("class", "main__dog-section__btn")
+  const dogIsNaughtyText = document.createElement("p")
+  const dogIsNaughtyButton = document.createElement("button")
+  dogIsNaughtyText.innerText = "Is naughty? " + dogBehaviour(thisDog), dogBehaviourButton(thisDog, dogIsNaughtyButton)
+  dogDescriptionCard.append(dogIsNaughtyDiv)
+  dogIsNaughtyDiv.append(dogIsNaughtyText, dogIsNaughtyButton)
+}
+
+function dogBehaviour(thisDog) {
+  if (thisDog.isGoodDog) {
+    return "Yes"
+  } else {
+    return "No"
   }
-  
-  function createLabel(forAttr, text) {
-    const label = document.createElement("label");
-    label.attributes.for = forAttr;
-    label.innerText = text;
-  
-    return label;
-  };
-  
-  function renderMainForm() {
-    const section = createSection();
-    const form = createForm();
-    const h2 = document.createElement("h2");
-  
-    h2.innerText = "Add a new Dog";
-  
-    section.append(h2, form);
-  
-    return section;
-  };
-  
-  function renderDogList(dogsArr) {
-    const listContainer = document.querySelector(".dogs-list");
-    for (const dog of dogsArr) {
-      const item = createDogListItem(dog);
-      listContainer.append(item);
-    }
-  };
-  
-  renderDogList(data);
-  
-  const formButton = document.querySelector(".dogs-list__button--add");
-  const dogContainer = document.querySelector(".main");
-  
-  // (4)
-  //TODO: Add an event listener on to form button so that
-  //when the user clicks the button, the form is displayed.
-  //the renderMainForm method will return an element that
-  //contains the form, so you only need to add it to the 
-  //dogContainer and remove any existing children.
-  
+}
+
+function dogBehaviourButton(thisDog, dogIsNaughtyButton) {
+  if (thisDog.isGoodDog) {
+    return (dogIsNaughtyButton.innerHTML = "Good dog!")
+  } else {
+    return (dogIsNaughtyButton.innerHTML = "Bad dog!")
+  }
+}
+
+// for (dog of data) {
+//   const li = document.createElement('li')
+//   li.innerHTML = dog.name
+//   li.setAttribute('class', 'dogs-list__button')
+//   li.addEventListener('click', createDogCard) // Change the function to display dog card
+//   headerDogList.append(li)
+// }
